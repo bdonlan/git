@@ -1,4 +1,4 @@
-Git v1.7.6 Release Notes (draft)
+Git v1.7.6 Release Notes
 ========================
 
 Updates since v1.7.5
@@ -48,15 +48,10 @@ Updates since v1.7.5
    easier to parse.
 
  * Aborting "git commit --interactive" discards updates to the index
-   made during the interctive session.
+   made during the interactive session.
 
  * "git commit" learned a "--patch" option to directly jump to the
    per-hunk selection UI of the interactive mode.
-
- * "git diff -C -C" used to disable the rename detection entirely when
-   there are too many copy candidate paths in the tree; now it falls
-   back to "-C" when doing so would keep the copy candidate paths
-   under the rename detection limit.
 
  * "git diff" and its family of commands learned --dirstat=0 to show
    directories that contribute less than 0.1% of changes.
@@ -71,6 +66,10 @@ Updates since v1.7.5
  * "git format-patch" quotes people's names when it has RFC822 special
    characters in it, e.g. "Junio C. Hamano" <jch@example.com>.  Earlier
    it was up to the user to do this when using its output.
+
+ * "git format-patch" can take an empty --subject-prefix now.
+
+ * "git grep" learned the "-P" option to take pcre regular expressions.
 
  * "git log" and friends learned a new "--notes" option to replace the
    "--show-notes" option.  Unlike "--show-notes", "--notes=<ref>" does
@@ -93,8 +92,19 @@ Updates since v1.7.5
 
  * p4-import (from contrib) learned a new option --preserve-user.
 
+ * "git read-tree -m" learned "--dry-run" option that reports if a merge
+   would fail without touching the index nor the working tree.
+
  * "git rebase" that does not specify on top of which branch to rebase
    the current branch now uses @{upstream} of the current branch.
+
+ * "git rebase" finished either normally or with --abort did not
+   update the reflog for HEAD to record the event to come back to
+   where it started from.
+
+ * "git remote add -t only-this-branch --mirror=fetch" is now allowed. Earlier
+   a fetch-mode mirror meant mirror everything, but now it only means refs are
+   not renamed.
 
  * "git rev-list --count" used with "--cherry-mark" counts the cherry-picked
    commits separately, producing more a useful output.
@@ -116,16 +126,11 @@ Fixes since v1.7.5
 Unless otherwise noted, all the fixes in 1.7.5.X maintenance track are
 included in this release.
 
- * The single-key mode of "git add -p" was easily fooled into thinking
-   that it was told to add everthing ('a') when up-arrow was pressed by
-   mistake.
-   (merge tr/add-i-no-escape later)
-
  * "git config" used to choke with an insanely long line.
    (merge ef/maint-strbuf-init later)
 
----
-exec >/var/tmp/1
-echo O=$(git describe master)
-O=v1.7.5.3-365-g7eacc2b
-git shortlog --no-merges ^maint ^$O master
+ * "git diff --quiet" did not work well with --diff-filter.
+   (merge jk/diff-not-so-quick later)
+
+ * "git status -z" did not default to --porcelain output format.
+   (merge bc/maint-status-z-to-use-porcelain later)
